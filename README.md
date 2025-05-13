@@ -1,1 +1,9 @@
 # Login
+
+## 로그인 기능 매번 만들기 귀찮다.
+
+```
+1. MyBatis 썼다(dao, xml구조). JPA 쓰고 싶으면 바꿔라
+2. Token 주는 방식이다. Session storage 쓰려고 했고, cookie 쓰려면 따로 처리해
+3. Oauth2 안 했다. 언젠간 해야지
+```
