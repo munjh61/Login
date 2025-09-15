@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDTO<T> {
-    private final HttpStatus status;
+    private final int status;
     private final String message;
     private final T data;
     private final long timestamp;
 
     @Builder
     private ResponseDTO(HttpStatus status, String message, T data, long timestamp) {
-        this.status = status;
+        this.status = status.value();
         this.message = message;
         this.data = data;
         this.timestamp = timestamp;
