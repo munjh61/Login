@@ -38,9 +38,9 @@ public class ResponseDTO<T> {
                 .build();
     }
 
-    public static <T> ResponseDTO<T> fail(String message) {
+    public static <T> ResponseDTO<T> fail(String message, HttpStatus status) {
         return ResponseDTO.<T>builder()
-                .status(HttpStatus.BAD_REQUEST)
+                .status(status)
                 .message(message)
                 .timestamp(System.currentTimeMillis())
                 .build();
