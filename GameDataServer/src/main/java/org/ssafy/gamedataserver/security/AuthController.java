@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,7 @@ import org.ssafy.gamedataserver.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -77,15 +76,17 @@ public class AuthController {
 
             String accessToken = jwtProvider.generateToken(username, JwtProvider.TokenType.ACCESS, ver);
             String refreshToken = jwtProvider.generateToken(username, JwtProvider.TokenType.REFRESH, ver);
+            String nickname = userRepository.findByUsername(username).get().getNickname();
+
             return ResponseEntity.ok(
-                    ResponseDTO.ok("로그인 성공", Map.of("accessToken", accessToken, "refreshToken", refreshToken))
+                    ResponseDTO.ok("로그인 성공", Map.of("nickname",nickname,"accessToken", accessToken, "refreshToken", refreshToken))
             );
 
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(ResponseDTO.fail("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.UNAUTHORIZED));
-        } catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException | NoSuchElementException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(ResponseDTO.fail("존재하지 않는 사용자입니다.", HttpStatus.UNAUTHORIZED));
